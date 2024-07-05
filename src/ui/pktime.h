@@ -4,6 +4,7 @@
 */
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <calc.h>
 
 // Keysizes to test for real computations
@@ -22,3 +23,4 @@ const double SECONDS_PER_YEAR = 31557600.0;
 
 // Function prototypes
 void calculate_and_output(double ops_per_sec);
+void output_help();

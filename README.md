@@ -41,3 +41,4 @@ ____________
 
 ### CLI Usage
 * Run `pktime.exe` to show brute force times for various keyspace sizes
+* Run `pktime.exe <attempts per second>` to estimate brute force times using a given ops per second value

@@ -11,11 +11,21 @@ int main(int argc, char* argv[])
 	double ops_per_sec = 0.0;
 	if (argc > 1)
 	{
+		if (strcmp(argv[1], "--help") == 0 || strcmp(argv[1], "-h") == 0)
+		{
+			output_help();
+			return 0;
+		}
+		else
+		{
 			ops_per_sec = atof(argv[1]);
+		}
 	}
 	
 	// Calculate the brute force times and output data for the user
 	calculate_and_output(ops_per_sec);
+	
+	return 0;
 }
 
 void calculate_and_output(double ops_per_sec)
@@ -49,6 +59,22 @@ void calculate_and_output(double ops_per_sec)
 		
 		// Display the average optime
 		printf("Average optime for one keypair check: %.8f\n", avg_optime);
+
+		double etimes[REAL_KEYSIZES_LENGTH];
+		double eiterations[REAL_KEYSIZES_LENGTH];
+		calc_esttimes(REAL_KEYSIZES, etimes, eiterations, REAL_KEYSIZES_LENGTH, avg_optime);
+
+		for (int i = 0; i < REAL_KEYSIZES_LENGTH; i++)
+		{
+			if (etimes[i] < SECONDS_PER_MINUTE)
+			{
+				printf("Est. time to bruteforce %d bit keysize: %.8f seconds with %.0f iterations\n", REAL_KEYSIZES[i], etimes[i], eiterations[i]);
+			}
+			else if (etimes[i] < SECONDS_PER_HOUR)
+			{
+				printf("Est. time to bruteforce %d bit keysize: %.8f minutes with %.0f iterations\n", REAL_KEYSIZES[i], etimes[i] / SECONDS_PER_MINUTE, eiterations[i]);
+			}
+		}
 	}
 
 	// Get the estimated optime for large keysizes
@@ -84,5 +110,13 @@ void calculate_and_output(double ops_per_sec)
 		}
 	}
 	
+}
+
+void output_help()
+{
+	printf("Usage:\n");
+	printf("./pktime <attempts per second> to calculate estimated brute for times for all key sizes\n");
+	printf("./pktime to calculate real brute force time for small keysizes and estimated times for larger sizes\n");
+	printf("./pktime --help/-h to print this message\n");
 }
 
